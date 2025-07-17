@@ -3,7 +3,7 @@
  * Plugin Name: Nexjob Autopost
  * Plugin URI: https://nexjob.tech
  * Description: Automatically sends POST requests to external API when new lowongan-kerja posts are published
- * Version: 1.1.2
+ * Version: 1.1.3
  * Author: Nexjob Team
  * License: GPL v2 or later
  * Text Domain: nexjob-autopost
@@ -15,7 +15,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Define plugin constants
-define('NEXJOB_AUTOPOST_VERSION', '1.1.2');
+define('NEXJOB_AUTOPOST_VERSION', '1.1.3');
 define('NEXJOB_AUTOPOST_PLUGIN_DIR', plugin_dir_path(__FILE__));
 define('NEXJOB_AUTOPOST_PLUGIN_URL', plugin_dir_url(__FILE__));
 define('NEXJOB_AUTOPOST_PLUGIN_FILE', __FILE__);

@@ -417,8 +417,9 @@ class Nexjob_Admin {
         );
 
         // Validate required fields
-        if (empty($name) || empty($post_types) || empty($integration_id) || empty($content_template)) {
-            wp_die('All fields must be filled.');
+        if (empty($data['name']) || empty($data['post_types']) || empty($data['integration_id']) || empty($data['content_template'])) {
+            wp_send_json_error('All fields must be filled.');
+            return;
         }
 
         if ($config_id > 0) {
@@ -521,34 +522,6 @@ class Nexjob_Admin {
         return (json_last_error() == JSON_ERROR_NONE);
     }
 
-   /**
-     * Sanitize hashtags to separate words joined by hyphens and slashes
-     *
-     * @param string $tags_string The original string of tags.
-     * @return string The sanitized string of tags.
-     */
-    public static function sanitize_hashtags($tags_string) {
-        $tags = explode(' ', $tags_string);
-        $sanitized_tags = [];
-
-        foreach ($tags as $tag) {
-            $split_by_slash = explode('/', $tag);
-            $temp_tags = [];
-
-            foreach ($split_by_slash as $slash_part) {
-                $split_by_hyphen = explode('-', $slash_part);
-                $temp_tags = array_merge($temp_tags, $split_by_hyphen);
-            }
-
-            foreach ($temp_tags as $single_tag) {
-                $single_tag = trim($single_tag);
-                if (!empty($single_tag)) {
-                    $sanitized_tags[] = '#' . $single_tag;
-                }
-            }
-        }
-
-        return implode(' ', $sanitized_tags);
-    }
+   
 }
 ?>

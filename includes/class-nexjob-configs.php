@@ -202,13 +202,14 @@ class Nexjob_Configs {
                 
                 if (!is_wp_error($terms) && !empty($terms)) {
                     foreach ($terms as $term) {
-                        // Split term names on "/" and "-" characters
-                        $term_parts = preg_split('/[\/\-]/', $term->name);
+                        // Split term names on "/" characters to create separate hashtags
+                        $term_parts = explode('/', $term->name);
                         foreach ($term_parts as $part) {
                             $part = trim($part);
                             if (!empty($part)) {
-                                // Remove spaces and add hashtag
-                                $hashtags[] = '#' . str_replace(' ', '', $part);
+                                // Remove spaces and hyphens, then add hashtag
+                                $clean_part = str_replace([' ', '-'], '', $part);
+                                $hashtags[] = '#' . $clean_part;
                             }
                         }
                     }
