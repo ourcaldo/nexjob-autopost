@@ -1,0 +1,4 @@
+0000000000000000000000000000000000000000 158a9457d177c18393fcac71aed9da70191fa20e space251 <45063499-space251@users.noreply.replit.com> 1752733594 +0000	commit (initial): Initial commit
+158a9457d177c18393fcac71aed9da70191fa20e 4ad55c7e9081098361189604a962314c06337d0e space251 <45063499-space251@users.noreply.replit.com> 1752733907 +0000	commit: Set up automatic posting of job openings and enable admin settings
+4ad55c7e9081098361189604a962314c06337d0e b400ca39ae794f0816e587bcd680e1978be9c57d space251 <45063499-space251@users.noreply.replit.com> 1752734355 +0000	commit: Enhance job posting process with retry, bulk resend, and notifications
+b400ca39ae794f0816e587bcd680e1978be9c57d 3c1c9ef0108648062630cbca0bd89c0c777b5e71 space251 <45063499-space251@users.noreply.replit.com> 1752735101 +0000	commit: Enable multiple autopost configurations for flexible content delivery

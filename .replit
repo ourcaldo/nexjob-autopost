@@ -1,4 +1,4 @@
-modules = ["nodejs-20", "python-3.11"]
+modules = ["php", "php-8.2"]
 
 [nix]
 channel = "stable-24_05"
@@ -13,15 +13,15 @@ author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "workflow.run"
-args = "HTML Server"
+args = "WordPress Server"
 
 [[workflows.workflow]]
-name = "HTML Server"
+name = "WordPress Server"
 author = "agent"
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "python -m http.server 5000"
+args = "php -S 0.0.0.0:5000"
 waitForPort = 5000
 
 [[ports]]

@@ -3,9 +3,350 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Welcome</title>
+    <title>Nexjob Autopost WordPress Plugin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f6f7f8;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .header h1 {
+            color: #2c3e50;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+        
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+        
+        .feature-card {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid #3498db;
+        }
+        
+        .feature-card h3 {
+            color: #2c3e50;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .feature-card ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .feature-card li {
+            margin: 8px 0;
+            padding-left: 20px;
+            position: relative;
+        }
+        
+        .feature-card li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+        }
+        
+        .admin-preview {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin-bottom: 40px;
+        }
+        
+        .admin-preview h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+        }
+        
+        .admin-nav {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+        }
+        
+        .nav-tab {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            padding: 10px 20px;
+            text-decoration: none;
+            color: #495057;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+        
+        .nav-tab.active {
+            background: #007cba;
+            color: white;
+            border-color: #007cba;
+        }
+        
+        .tab-content {
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .stat-number {
+            font-size: 2em;
+            font-weight: bold;
+            color: #3498db;
+        }
+        
+        .stat-label {
+            color: #7f8c8d;
+            font-size: 0.9em;
+            margin-top: 5px;
+        }
+        
+        .improvement-list {
+            background: #e8f5e8;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+        }
+        
+        .improvement-list h3 {
+            color: #27ae60;
+            margin-bottom: 15px;
+        }
+        
+        .improvement-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .improvement-list li {
+            margin: 10px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+        
+        .improvement-list li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #27ae60;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+        
+        .code-block {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            overflow-x: auto;
+            margin: 20px 0;
+        }
+        
+        .install-note {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 40px;
+        }
+        
+        .install-note h3 {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        .install-note p {
+            color: #856404;
+            margin-bottom: 10px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .admin-nav {
+                flex-direction: column;
+            }
+            
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome</h1>
+    <div class="container">
+        <div class="header">
+            <h1>Nexjob Autopost WordPress Plugin</h1>
+            <p>Automatically send job postings to external APIs when published</p>
+        </div>
+        
+        <div class="feature-grid">
+            <div class="feature-card">
+                <h3>🔄 Automatic API Integration</h3>
+                <ul>
+                    <li>Monitors new job postings (lowongan-kerja)</li>
+                    <li>Sends to NexPocket API automatically</li>
+                    <li>Handles data transformation and formatting</li>
+                    <li>Extracts tags and location information</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>⚙️ Multi-Configuration Support</h3>
+                <ul>
+                    <li>Multiple autopost configurations</li>
+                    <li>Different integration IDs per config</li>
+                    <li>Support for any post type</li>
+                    <li>Flexible content templates</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>🛡️ Robust Error Handling</h3>
+                <ul>
+                    <li>Automatic retry mechanism</li>
+                    <li>Exponential backoff strategy</li>
+                    <li>Email notifications for failures</li>
+                    <li>Comprehensive logging system</li>
+                </ul>
+            </div>
+            
+            <div class="feature-card">
+                <h3>📊 Admin Dashboard</h3>
+                <ul>
+                    <li>Statistics and monitoring</li>
+                    <li>Log viewer with details</li>
+                    <li>Bulk resend functionality</li>
+                    <li>Configuration management</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="admin-preview">
+            <h2>🎨 Redesigned Admin Interface</h2>
+            <p>The plugin admin interface has been completely restructured into three focused sections:</p>
+            
+            <div class="admin-nav">
+                <a href="#" class="nav-tab active">Dashboard</a>
+                <a href="#" class="nav-tab">Configurations</a>
+                <a href="#" class="nav-tab">Settings</a>
+            </div>
+            
+            <div class="tab-content">
+                <h3>Dashboard Overview</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">45</div>
+                        <div class="stat-label">Total Requests</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">42</div>
+                        <div class="stat-label">Successful</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div class="stat-label">Failed</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">93%</div>
+                        <div class="stat-label">Success Rate</div>
+                    </div>
+                </div>
+                
+                <p>View recent logs, manage configurations, and perform bulk actions all from a clean, organized interface.</p>
+            </div>
+        </div>
+        
+        <div class="improvement-list">
+            <h3>Recent Improvements (Evening Session)</h3>
+            <ul>
+                <li>Separated messy single-page admin into clean, focused sections</li>
+                <li>Fixed log details modal with proper AJAX functionality</li>
+                <li>Removed integration ID from main API settings</li>
+                <li>Enhanced admin menu structure with clear navigation</li>
+                <li>Added responsive design and better visual feedback</li>
+                <li>Improved user experience with loading states and success messages</li>
+                <li>Created dedicated configuration management page</li>
+                <li>Enhanced JavaScript with better error handling</li>
+            </ul>
+        </div>
+        
+        <div class="code-block">
+// Example API Request Structure
+{
+    "type": "now",
+    "shortLink": true,
+    "date": "2025-07-17T19:25:00Z",
+    "tags": ["job", "hiring", "jakarta"],
+    "content": "Lowongan kerja di kota Jakarta, cek selengkapnya di https://example.com/job/123.\n\n#job #hiring #jakarta",
+    "images": []
+}
+        </div>
+        
+        <div class="install-note">
+            <h3>📋 Installation Note</h3>
+            <p>This is a WordPress plugin that requires a WordPress installation to function properly. The plugin files are organized as follows:</p>
+            <p><strong>Main Files:</strong> nexjob-autopost.php (main plugin file)</p>
+            <p><strong>Admin Pages:</strong> admin/main-page.php, admin/settings-page.php, admin/configs-page.php</p>
+            <p><strong>Core Classes:</strong> includes/class-nexjob-admin.php, includes/class-nexjob-configs.php</p>
+            <p><strong>Assets:</strong> admin/css/admin-style.css, admin/js/admin-script.js</p>
+        </div>
+    </div>
 </body>
 </html>

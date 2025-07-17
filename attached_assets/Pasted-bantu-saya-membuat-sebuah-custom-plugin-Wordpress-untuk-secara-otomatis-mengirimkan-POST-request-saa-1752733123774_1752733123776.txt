@@ -1,0 +1,166 @@
+bantu saya membuat sebuah custom plugin Wordpress untuk secara otomatis mengirimkan POST request saat ada post baru di custom post type lowongan-kerja.
+
+Request POST dikirim ke: https://autopost.nexpocket.com/api/public/v1/post
+Header Authorization: d81c427d7627cc46207b3a069f8d213abfc034acaa41b4875b0c9f71ed7e277c
+
+Data yang dikirim:
+{
+  "type": "now",
+  "shortLink": true,
+  "date": "2025-07-14T08:00:00.000Z",
+  "tags": [
+    {
+      "value": "placeholder",
+      "label": "Placeholder"
+    },
+    {
+      "value": "demo",
+      "label": "Demo"
+    }
+  ],
+  "posts": [
+    {
+      "integration": {
+        "id": "cmd6ykh840001n5bdw68gcwnh"
+      },
+      "value": [
+        {
+          "content": "🧪 Testing instant publishing with a placeholder image. Everything looks good!",
+          "image": [
+            {
+              "id": "img-placeholder-600x400",
+              "path": "https://placehold.co/600x400/EEE/31343C"
+            }
+          ]
+        }
+      ],
+      "group": "instant-test-group",
+      "settings": {}
+    }
+  ]
+}
+
+Perhatikan berikut ini:
+1. Untuk tags, dapatkan data dari tags di post tersebut (tag-loker).
+2. Hapus image di request POST, jadi tidak perlu send field image
+3. Content ganti ke:
+Lowongan kerja di kota nexjob_lokasi_kota, cek selengkapnya di {link post}. 
+
+#hashtag
+
+4. nexjob_lokasi_kota merupakan custom fields di cpt lowongan-kerja (I made with jetengine)
+5. Hashtag tambahkan semua tags di tag-loker
+6. Untuk {link-post} akan seperti cms.nexjob.tech/*/*. Gantikan dengan nexjob.tech/*/*
+
+Untuk contoh format post di cpt lowongan kerja itu seperti ini:
+[
+  {
+    "id": 7903,
+    "date": "2025-07-17T05:16:11",
+    "date_gmt": "2025-07-17T05:16:11",
+    "guid": {
+      "rendered": "https://cms.nexjob.tech/?p=7903"
+    },
+    "modified": "2025-07-17T05:56:25",
+    "modified_gmt": "2025-07-17T05:56:25",
+    "slug": "sales-lapangan-pt-juara-kemilau-nusantara-tangerang",
+    "status": "publish",
+    "type": "lowongan-kerja",
+    "link": "https://cms.nexjob.tech/lowongan-kerja/sales-lapangan-pt-juara-kemilau-nusantara-tangerang/",
+    "title": {
+      "rendered": "Sales Lapangan"
+    },
+    "content": {
+      "rendered": "\u003Cp\u003EPT. Juara Kemilau Nusantara adalah perusahaan yang bergerak di bidang distribusi dan penjualan produk Sanitary Ware&#8217;s . Kami membuka kesempatan bagi tenaga penjualan (sales) khusus untuk Wanita yang tangguh dan berorientasi pada hasil untuk bergabung dan mengembangkan pasar bersama kami.\u003C/p\u003E\n\u003Ch2\u003ETanggung Jawab Pekerjaan :\u003C/h2\u003E\n\u003Cp\u003E✅ Melakukan penawaran dan penjualan produk secara langsung ✅ Mencari dan mengembangkan jaringan pelanggan baru ✅ Menjaga hubungan baik dan komunikasi rutin dengan pelanggan lama ✅ Memberikan informasi produk secara jelas dan meyakinkan ✅ Melaporkan hasil penjualan secara berkala kepada atasan ✅ Berkontribusi dalam pencapaian target penjualan individu maupun tim\u003C/p\u003E\n\u003Ch2\u003EKeahlian :\u003C/h2\u003E\n\u003Cul\u003E\n\u003Cli\u003EMampu menjual produk secara langsung (lapangan).\u003C/li\u003E\n\u003Cli\u003EKomunikasi yang baik dan persuasif.\u003C/li\u003E\n\u003Cli\u003EMampu menjalin relasi dengan pelanggan baru maupun lama.\u003C/li\u003E\n\u003Cli\u003EMemiliki kemampuan negosiasi yang baik.\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch2\u003EKualifikasi :\u003C/h2\u003E\n\u003Cul\u003E\n\u003Cli\u003EMemiliki pengalaman sebagai sales lapangan minimal 3 tahun\u003C/li\u003E\n\u003Cli\u003EAda Kendaraan Sendiri\u003C/li\u003E\n\u003Cli\u003EPunya Kealihan Penjualan\u003C/li\u003E\n\u003C/ul\u003E\n\u003Ch2\u003EWaktu Bekerja :\u003C/h2\u003E\n\u003Cp\u003EJam 8 s/17 Senin-Sabtu\u003C/p\u003E\n",
+      "protected": false
+    },
+    "template": "",
+    "meta": {
+      "rank_math_title": "Lowongan Kerja Sales Lapangan PT. JUARA KEMILAU NUSANTARA di Tangerang - Nexjob",
+      "rank_math_description": "PT. Juara Kemilau Nusantara adalah perusahaan yang bergerak di bidang distribusi dan penjualan produk Sanitary Ware's .",
+      "rank_math_focus_keyword": "",
+      "rank_math_canonical_url": "",
+      "rank_math_robots": "",
+      "nexjob_id_lowongan": "15830800",
+      "nexjob_sumber_loker": "Loker.id",
+      "nexjob_link_loker": "https://www.loker.id/cari-lowongan-kerja?jobid=15830800",
+      "nexjob_nama_perusahaan": "PT. JUARA KEMILAU NUSANTARA",
+      "nexjob_lokasi_kota": "Tangerang",
+      "nexjob_lokasi_provinsi": "Banten",
+      "nexjob_kategori_pekerjaan": "Konsultan Penjualan",
+      "nexjob_pengalaman_kerja": "1-3 Tahun",
+      "nexjob_pendidikan": "SMA/SMK",
+      "nexjob_gaji": "Negosiasi",
+      "nexjob_kebijakan_kerja": "On-site Working",
+      "nexjob_industri": "Grosir / Ritel",
+      "nexjob_tag_loker": "Konsultan Penjualan, SMA/SMK, Staff / Officer, Sales Executive, On-site Working"
+    },
+    "tag-loker": [93, 69, 152, 85, 67],
+    "lokasi-kerja": [87],
+    "class_list": [
+      "post-7903",
+      "lowongan-kerja",
+      "type-lowongan-kerja",
+      "status-publish",
+      "hentry",
+      "tag-loker-konsultan-penjualan",
+      "tag-loker-on-site-working",
+      "tag-loker-sales-executive",
+      "tag-loker-sma-smk",
+      "tag-loker-staff-officer",
+      "lokasi-kerja-tangerang"
+    ],
+    "_links": {
+      "self": [
+        {
+          "href": "https://cms.nexjob.tech/wp-json/wp/v2/lowongan-kerja/7903",
+          "targetHints": {
+            "allow": [
+              "GET"
+            ]
+          }
+        }
+      ],
+      "collection": [
+        {
+          "href": "https://cms.nexjob.tech/wp-json/wp/v2/lowongan-kerja"
+        }
+      ],
+      "about": [
+        {
+          "href": "https://cms.nexjob.tech/wp-json/wp/v2/types/lowongan-kerja"
+        }
+      ],
+      "wp:attachment": [
+        {
+          "href": "https://cms.nexjob.tech/wp-json/wp/v2/media?parent=7903"
+        }
+      ],
+      "wp:term": [
+        {
+          "taxonomy": "tag-loker",
+          "embeddable": true,
+          "href": "https://cms.nexjob.tech/wp-json/wp/v2/tag-loker?post=7903"
+        },
+        {
+          "taxonomy": "lokasi-kerja",
+          "embeddable": true,
+          "href": "https://cms.nexjob.tech/wp-json/wp/v2/lokasi-kerja?post=7903"
+        }
+      ],
+      "curies": [
+        {
+          "name": "wp",
+          "href": "https://api.w.org/{rel}",
+          "templated": true
+        }
+      ]
+    }
+  }
+]
+
+Saya juga ingin ada log record yang bisa saya lihat dan hapus dan auto hapus sesuai dengan interval.
+
+Untuk setting, buat seperti fields, untuk link API dan authorization header sehingga jika perlu saya bisa mengganti nantinya
+
+Oh ya, keep in mind untuk post yang di kirim ke API itu bukan hanya post yang di publish secara manual (dengan mengklik tombol Publish di WP), tapi juga Post yang datang dari API REST wordpress atau 3rd party plugin (case saat ini saya menggunakan auto post dari luar WP, saya kirim ke webhook plugin dan plugin membuat post baru yang langsung publish).
