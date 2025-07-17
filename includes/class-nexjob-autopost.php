@@ -206,6 +206,13 @@ class Nexjob_Autopost {
         $api_url = get_option('nexjob_autopost_api_url', 'https://autopost.nexpocket.com/api/public/v1/post');
         $auth_header = get_option('nexjob_autopost_auth_header', '');
         
+        // Ensure the API URL has the correct path
+        if (strpos($api_url, '/api/public/v1/post') === false && strpos($api_url, '/public/v1/post') !== false) {
+            $api_url = str_replace('/public/v1/post', '/api/public/v1/post', $api_url);
+            // Update the stored option with correct URL
+            update_option('nexjob_autopost_api_url', $api_url);
+        }
+        
         $headers = array(
             'Content-Type: application/json',
             'Authorization: ' . $auth_header
