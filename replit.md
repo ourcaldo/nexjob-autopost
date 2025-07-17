@@ -121,7 +121,7 @@ Lowongan kerja di kota {nexjob_lokasi_kota}, cek selengkapnya di {post_link}.
 
 ### Major UI Restructure (Evening)
 - ✓ **Separated Admin Interface**: Split the messy single-page admin into clean, focused sections
-  - **Main Dashboard**: Statistics overview, recent configurations, recent errors, and latest 50 logs only
+  - **Main Dashboard**: Statistics overview and latest 50 logs only (no filters, no bulk actions)
   - **Logs Page**: Dedicated page for viewing and managing all API request logs with filters
   - **Bulk Actions Page**: Separate page for bulk operations, retrying failed requests, and quick actions
   - **Settings Page**: General plugin settings (API endpoint, auth token, log retention, retry settings, email notifications)
@@ -137,7 +137,7 @@ Lowongan kerja di kota {nexjob_lokasi_kota}, cek selengkapnya di {post_link}.
 
 ### Technical Improvements (Evening)
 - **Page Templates**: 
-  - `admin/main-page.php`: Dashboard with statistics and latest 50 logs
+  - `admin/dashboard-page.php`: Dashboard with statistics and latest 50 logs only
   - `admin/logs-page.php`: Full logs viewer with pagination and filters
   - `admin/bulk-page.php`: Bulk actions and failed request management
   - `admin/settings-page.php`: General plugin settings
@@ -151,7 +151,7 @@ Lowongan kerja di kota {nexjob_lokasi_kota}, cek selengkapnya di {post_link}.
   - Responsive grid layouts for statistics and configurations
   - Better status badges and visual indicators
   - Mobile-friendly design patterns
-- **Cleaned Up Files**: Removed unnecessary git repository files and unused test files
+- **Cleaned Up Files**: Removed unnecessary git repository files, unused test files, and index.html that didn't belong in WordPress plugin
 
 ### Configuration Management Enhancements
 - **Individual Integration IDs**: Each autopost configuration now has its own integration ID

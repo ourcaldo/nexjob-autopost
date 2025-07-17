@@ -129,7 +129,7 @@ class Nexjob_Admin {
      * Display admin page
      */
     public function admin_page() {
-        include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/main-page.php';
+        include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/dashboard-page.php';
     }
     
     /**

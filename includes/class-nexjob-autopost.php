@@ -197,64 +197,7 @@ class Nexjob_Autopost {
         }
     }
     
-    /**
-     * Prepare post data for API
-     */
-    private function prepare_post_data($post) {
-        $post_id = $post->ID;
-        
-        // Get custom fields
-        $lokasi_kota = get_post_meta($post_id, 'nexjob_lokasi_kota', true);
-        
-        // Get tags from tag-loker taxonomy
-        $tags = wp_get_post_terms($post_id, 'tag-loker');
-        $tag_data = array();
-        $hashtags = array();
-        
-        if (!is_wp_error($tags) && !empty($tags)) {
-            foreach ($tags as $tag) {
-                $tag_data[] = array(
-                    'value' => $tag->slug,
-                    'label' => $tag->name
-                );
-                $hashtags[] = '#' . str_replace(' ', '', $tag->name);
-            }
-        }
-        
-        // Prepare post link
-        $post_link = get_permalink($post_id);
-        $post_link = str_replace('cms.nexjob.tech', 'nexjob.tech', $post_link);
-        
-        // Prepare content
-        $content = "Lowongan kerja di kota " . $lokasi_kota . ", cek selengkapnya di " . $post_link . ".";
-        if (!empty($hashtags)) {
-            $content .= "\n\n" . implode(' ', $hashtags);
-        }
-        
-        // Prepare API data structure
-        $api_data = array(
-            'type' => 'now',
-            'shortLink' => true,
-            'date' => current_time('c'), // ISO 8601 format
-            'tags' => $tag_data,
-            'posts' => array(
-                array(
-                    'integration' => array(
-                        'id' => get_option('nexjob_autopost_integration_id', 'cmd6ykh840001n5bdw68gcwnh')
-                    ),
-                    'value' => array(
-                        array(
-                            'content' => $content
-                        )
-                    ),
-                    'group' => 'nexjob-autopost-group',
-                    'settings' => new stdClass()
-                )
-            )
-        );
-        
-        return $api_data;
-    }
+
     
     /**
      * Send data to external API
