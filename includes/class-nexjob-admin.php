@@ -8,13 +8,13 @@ if (!defined('ABSPATH')) {
 }
 
 class Nexjob_Admin {
-    
+
     private $configs;
-    
+
     public function __construct() {
         $this->configs = new Nexjob_Configs();
     }
-    
+
     /**
      * Initialize admin functionality
      */
@@ -33,7 +33,7 @@ class Nexjob_Admin {
         add_action('wp_ajax_nexjob_get_log_details', array($this, 'get_log_details'));
         add_action('wp_dashboard_setup', array($this, 'add_dashboard_widget'));
     }
-    
+
     /**
      * Add admin menu
      */
@@ -47,7 +47,7 @@ class Nexjob_Admin {
             'dashicons-share',
             30
         );
-        
+
         add_submenu_page(
             'nexjob-autopost',
             'Dashboard',
@@ -56,7 +56,7 @@ class Nexjob_Admin {
             'nexjob-autopost',
             array($this, 'admin_page')
         );
-        
+
         add_submenu_page(
             'nexjob-autopost',
             'Logs',
@@ -65,7 +65,7 @@ class Nexjob_Admin {
             'nexjob-logs',
             array($this, 'logs_page')
         );
-        
+
         add_submenu_page(
             'nexjob-autopost',
             'Bulk Actions',
@@ -74,7 +74,7 @@ class Nexjob_Admin {
             'nexjob-bulk',
             array($this, 'bulk_page')
         );
-        
+
         add_submenu_page(
             'nexjob-autopost',
             'Configurations',
@@ -83,7 +83,7 @@ class Nexjob_Admin {
             'nexjob-configs',
             array($this, 'configs_page')
         );
-        
+
         add_submenu_page(
             'nexjob-autopost',
             'Settings',
@@ -93,7 +93,7 @@ class Nexjob_Admin {
             array($this, 'settings_page')
         );
     }
-    
+
     /**
      * Register plugin settings
      */
@@ -106,7 +106,7 @@ class Nexjob_Admin {
         register_setting('nexjob_autopost_settings', 'nexjob_autopost_email_notifications');
         register_setting('nexjob_autopost_settings', 'nexjob_autopost_notification_email');
     }
-    
+
     /**
      * Enqueue admin scripts and styles
      */
@@ -115,50 +115,50 @@ class Nexjob_Admin {
         if (!in_array($hook, ['toplevel_page_nexjob-autopost', 'nexjob-autopost_page_nexjob-logs', 'nexjob-autopost_page_nexjob-bulk', 'nexjob-autopost_page_nexjob-configs', 'nexjob-autopost_page_nexjob-settings'])) {
             return;
         }
-        
+
         wp_enqueue_style('nexjob-admin-style', NEXJOB_AUTOPOST_PLUGIN_URL . 'admin/css/admin-style.css', array(), NEXJOB_AUTOPOST_VERSION);
         wp_enqueue_script('nexjob-admin-script', NEXJOB_AUTOPOST_PLUGIN_URL . 'admin/js/admin-script.js', array('jquery'), NEXJOB_AUTOPOST_VERSION, true);
-        
+
         wp_localize_script('nexjob-admin-script', 'nexjob_ajax', array(
             'ajax_url' => admin_url('admin-ajax.php'),
             'nonce' => wp_create_nonce('nexjob_admin_nonce')
         ));
     }
-    
+
     /**
      * Display admin page
      */
     public function admin_page() {
         include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/dashboard-page.php';
     }
-    
+
     /**
      * Display logs page
      */
     public function logs_page() {
         include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/logs-page.php';
     }
-    
+
     /**
      * Display bulk actions page
      */
     public function bulk_page() {
         include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/bulk-page.php';
     }
-    
+
     /**
      * Test API connection
      */
     public function test_api_connection() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         $api_url = sanitize_text_field($_POST['api_url']);
         $auth_header = sanitize_text_field($_POST['auth_header']);
-        
+
         // Test data
         $test_data = array(
             'type' => 'now',
@@ -180,12 +180,12 @@ class Nexjob_Admin {
                 )
             )
         );
-        
+
         $headers = array(
             'Content-Type: application/json',
             'Authorization: ' . $auth_header
         );
-        
+
         $ch = curl_init();
         curl_setopt($ch, CURLOPT_URL, $api_url);
         curl_setopt($ch, CURLOPT_POST, true);
@@ -194,127 +194,127 @@ class Nexjob_Admin {
         curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($ch, CURLOPT_TIMEOUT, 30);
         curl_setopt($ch, CURLOPT_SSL_VERIFYPEER, false);
-        
+
         $response = curl_exec($ch);
         $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
         $error = curl_error($ch);
         curl_close($ch);
-        
+
         if ($error) {
             wp_send_json_error('cURL Error: ' . $error);
         }
-        
+
         $status = ($http_code >= 200 && $http_code < 300) ? 'success' : 'error';
-        
+
         wp_send_json(array(
             'status' => $status,
             'http_code' => $http_code,
             'response' => $response
         ));
     }
-    
+
     /**
      * Delete logs
      */
     public function delete_logs() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'nexjob_autopost_logs';
-        
+
         $log_ids = array_map('intval', $_POST['log_ids']);
-        
+
         if (!empty($log_ids)) {
             $placeholders = implode(',', array_fill(0, count($log_ids), '%d'));
             $wpdb->query($wpdb->prepare("DELETE FROM $table_name WHERE id IN ($placeholders)", $log_ids));
         }
-        
+
         wp_send_json_success('Logs deleted successfully');
     }
-    
+
     /**
      * Export logs
      */
     public function export_logs() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'nexjob_autopost_logs';
-        
+
         $logs = $wpdb->get_results("SELECT * FROM $table_name ORDER BY created_at DESC", ARRAY_A);
-        
+
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment; filename="nexjob-autopost-logs-' . date('Y-m-d') . '.csv"');
-        
+
         $output = fopen('php://output', 'w');
-        
+
         if (!empty($logs)) {
             fputcsv($output, array_keys($logs[0]));
             foreach ($logs as $log) {
                 fputcsv($output, $log);
             }
         }
-        
+
         fclose($output);
         exit;
     }
-    
+
     /**
      * Bulk resend posts
      */
     public function bulk_resend() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         $post_ids = array_map('intval', $_POST['post_ids']);
-        
+
         if (empty($post_ids)) {
             wp_send_json_error('No posts selected');
         }
-        
+
         $autopost = new Nexjob_Autopost();
         $results = $autopost->bulk_resend_posts($post_ids);
-        
+
         wp_send_json_success($results);
     }
-    
+
     /**
      * Retry single post
      */
     public function retry_single() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         $post_id = intval($_POST['post_id']);
-        
+
         if (!$post_id) {
             wp_send_json_error('Invalid post ID');
         }
-        
+
         $autopost = new Nexjob_Autopost();
         $results = $autopost->bulk_resend_posts(array($post_id));
-        
+
         if ($results['success'] > 0) {
             wp_send_json_success('Post resent successfully');
         } else {
             wp_send_json_error('Failed to resend post: ' . implode(', ', $results['errors']));
         }
     }
-    
+
     /**
      * Add dashboard widget
      */
@@ -327,7 +327,7 @@ class Nexjob_Admin {
             );
         }
     }
-    
+
     /**
      * Dashboard widget content
      */
@@ -335,31 +335,31 @@ class Nexjob_Admin {
         $logger = new Nexjob_Logger();
         $stats = $logger->get_stats();
         $recent_errors = $logger->get_recent_errors(3);
-        
+
         echo '<div class="nexjob-dashboard-widget">';
-        
+
         // Stats
         echo '<div class="dashboard-stat">';
         echo '<span class="dashboard-stat-label">Total Requests:</span>';
         echo '<span class="dashboard-stat-value">' . $stats['total'] . '</span>';
         echo '</div>';
-        
+
         echo '<div class="dashboard-stat">';
         echo '<span class="dashboard-stat-label">Success Rate:</span>';
         $success_rate = $stats['total'] > 0 ? round(($stats['success'] / $stats['total']) * 100, 1) : 0;
         echo '<span class="dashboard-stat-value">' . $success_rate . '%</span>';
         echo '</div>';
-        
+
         echo '<div class="dashboard-stat">';
         echo '<span class="dashboard-stat-label">Today:</span>';
         echo '<span class="dashboard-stat-value">' . $stats['today'] . '</span>';
         echo '</div>';
-        
+
         echo '<div class="dashboard-stat">';
         echo '<span class="dashboard-stat-label">This Week:</span>';
         echo '<span class="dashboard-stat-value">' . $stats['week'] . '</span>';
         echo '</div>';
-        
+
         // Recent errors
         if (!empty($recent_errors)) {
             echo '<div style="margin-top: 15px; border-top: 1px solid #f0f0f1; padding-top: 10px;">';
@@ -371,42 +371,42 @@ class Nexjob_Admin {
                 echo '</div>';
             }
         }
-        
+
         echo '<div style="margin-top: 15px;">';
         echo '<a href="' . admin_url('admin.php?page=nexjob-autopost') . '" class="button button-small">View Full Logs</a>';
         echo '</div>';
-        
+
         echo '</div>';
     }
-    
+
     /**
      * Display configurations page
      */
     public function configs_page() {
         include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/configs-page.php';
     }
-    
+
     /**
      * Display settings page
      */
     public function settings_page() {
         include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/settings-page.php';
     }
-    
 
-    
 
-    
+
+
+
     /**
      * Save configuration AJAX handler
      */
     public function save_config() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         $config_id = intval($_POST['config_id']);
         $data = array(
             'name' => sanitize_text_field($_POST['config_name']),
@@ -415,89 +415,94 @@ class Nexjob_Admin {
             'content_template' => wp_kses_post($_POST['content_template']),
             'status' => sanitize_text_field($_POST['config_status'])
         );
-        
+
+        // Validate required fields
+        if (empty($name) || empty($post_types) || empty($integration_id) || empty($content_template)) {
+            wp_die('All fields must be filled.');
+        }
+
         if ($config_id > 0) {
             $result = $this->configs->update_config($config_id, $data);
         } else {
             $result = $this->configs->create_config($data);
         }
-        
+
         if ($result !== false) {
             wp_send_json_success();
         } else {
             wp_send_json_error('Failed to save configuration');
         }
     }
-    
+
     /**
      * Delete configuration AJAX handler
      */
     public function delete_config() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         $config_id = intval($_POST['config_id']);
         $result = $this->configs->delete_config($config_id);
-        
+
         if ($result !== false) {
             wp_send_json_success();
         } else {
             wp_send_json_error('Failed to delete configuration');
         }
     }
-    
+
     /**
      * Get placeholders AJAX handler
      */
     public function get_placeholders() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         $post_type = sanitize_text_field($_POST['post_type']);
         $placeholders = $this->configs->get_placeholder_variables($post_type);
-        
+
         wp_send_json_success($placeholders);
     }
-    
+
     /**
      * Get log details AJAX handler
      */
     public function get_log_details() {
         check_ajax_referer('nexjob_admin_nonce', 'nonce');
-        
+
         if (!current_user_can('manage_options')) {
             wp_die('Unauthorized');
         }
-        
+
         $log_id = intval($_POST['log_id']);
-        
+
         global $wpdb;
         $table_name = $wpdb->prefix . 'nexjob_autopost_logs';
-        
+
         $log = $wpdb->get_row($wpdb->prepare("SELECT * FROM $table_name WHERE id = %d", $log_id));
-        
+
         if (!$log) {
             wp_send_json_error('Log not found');
         }
-        
+
         // Try to format JSON data
         $request_data = $log->request_data;
         $response_data = $log->response_data;
-        
+
         if ($this->is_json($request_data)) {
             $request_data = json_encode(json_decode($request_data), JSON_PRETTY_PRINT);
         }
-        
+
         if ($this->is_json($response_data)) {
             $response_data = json_encode(json_decode($response_data), JSON_PRETTY_PRINT);
         }
-        
+
         wp_send_json_success(array(
             'request_data' => $request_data,
             'response_data' => $response_data,
@@ -507,13 +512,43 @@ class Nexjob_Admin {
             'created_at' => $log->created_at
         ));
     }
-    
+
     /**
      * Check if string is valid JSON
      */
     private function is_json($string) {
         json_decode($string);
         return (json_last_error() == JSON_ERROR_NONE);
+    }
+
+   /**
+     * Sanitize hashtags to separate words joined by hyphens and slashes
+     *
+     * @param string $tags_string The original string of tags.
+     * @return string The sanitized string of tags.
+     */
+    public static function sanitize_hashtags($tags_string) {
+        $tags = explode(' ', $tags_string);
+        $sanitized_tags = [];
+
+        foreach ($tags as $tag) {
+            $split_by_slash = explode('/', $tag);
+            $temp_tags = [];
+
+            foreach ($split_by_slash as $slash_part) {
+                $split_by_hyphen = explode('-', $slash_part);
+                $temp_tags = array_merge($temp_tags, $split_by_hyphen);
+            }
+
+            foreach ($temp_tags as $single_tag) {
+                $single_tag = trim($single_tag);
+                if (!empty($single_tag)) {
+                    $sanitized_tags[] = '#' . $single_tag;
+                }
+            }
+        }
+
+        return implode(' ', $sanitized_tags);
     }
 }
 ?>
