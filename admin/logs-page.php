@@ -8,13 +8,13 @@ if (!defined('ABSPATH')) {
 }
 
 // Get logs data
-$autopost = new Nexjob_Autopost();
+$logger = new Nexjob_Logger();
 $status_filter = isset($_GET['status']) ? sanitize_text_field($_GET['status']) : '';
 $current_page = isset($_GET['log_page']) ? max(1, intval($_GET['log_page'])) : 1;
 $logs_per_page = 20;
 
 // Get logs with pagination
-$logs_data = $autopost->get_logs($status_filter, $current_page, $logs_per_page);
+$logs_data = $logger->get_logs($current_page, $logs_per_page, $status_filter);
 
 // Get settings for retry functionality
 $max_retries = get_option('nexjob_autopost_max_retries', 3);

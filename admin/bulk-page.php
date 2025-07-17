@@ -17,8 +17,8 @@ $recent_posts = get_posts(array(
 ));
 
 // Get recent failed posts
-$autopost = new Nexjob_Autopost();
-$failed_logs = $autopost->get_logs('failed', 1, 50);
+$logger = new Nexjob_Logger();
+$failed_logs = $logger->get_logs(1, 50, 'error');
 ?>
 
 <div class="wrap">
