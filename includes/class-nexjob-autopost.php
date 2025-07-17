@@ -203,12 +203,17 @@ class Nexjob_Autopost {
      * Send data to external API
      */
     private function send_to_api($data) {
-        $api_url = get_option('nexjob_autopost_api_url', 'https://autopost.nexpocket.com/api/public/v1/post');
+        $api_url = get_option('nexjob_autopost_api_url', 'https://autopost.nexpocket.com/api/public/v1/posts');
         $auth_header = get_option('nexjob_autopost_auth_header', '');
         
-        // Ensure the API URL has the correct path
-        if (strpos($api_url, '/api/public/v1/post') === false && strpos($api_url, '/public/v1/post') !== false) {
-            $api_url = str_replace('/public/v1/post', '/api/public/v1/post', $api_url);
+        // Ensure the API URL has the correct path - fix both missing /api and missing 's'
+        if (strpos($api_url, '/api/public/v1/posts') === false) {
+            // Handle various URL formats and fix them
+            if (strpos($api_url, '/public/v1/post') !== false) {
+                $api_url = str_replace('/public/v1/post', '/api/public/v1/posts', $api_url);
+            } elseif (strpos($api_url, '/api/public/v1/post') !== false && strpos($api_url, '/api/public/v1/posts') === false) {
+                $api_url = str_replace('/api/public/v1/post', '/api/public/v1/posts', $api_url);
+            }
             // Update the stored option with correct URL
             update_option('nexjob_autopost_api_url', $api_url);
         }
