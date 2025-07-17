@@ -119,7 +119,7 @@ class Nexjob_Autopost {
         }
         
         try {
-            // Parse content template with placeholders
+            // Parse content template with placeholders - this will throw exception if validation fails
             $content = $this->configs->parse_content_template($config->content_template, $post);
             
             // Get tags for API
@@ -169,11 +169,14 @@ class Nexjob_Autopost {
             }
             
         } catch (Exception $e) {
-            // Log error
-            $log_id = $this->log_error($post_id, $post->post_title, $e->getMessage(), $config->id);
+            // Log error - but don't schedule retry for validation errors
+            $this->log_error($post_id, $post->post_title, $e->getMessage(), $config->id);
             
-            // Schedule retry for exception
-            $this->schedule_retry($log_id, $post_id, 1);
+            // Only schedule retry if it's not a validation error
+            if (strpos($e->getMessage(), 'Content validation failed') === false) {
+                $log_id = $this->log_error($post_id, $post->post_title, $e->getMessage(), $config->id);
+                $this->schedule_retry($log_id, $post_id, 1);
+            }
         }
     }
     

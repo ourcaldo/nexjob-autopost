@@ -175,6 +175,7 @@ class Nexjob_Configs {
      */
     public function parse_content_template($template, $post) {
         $content = $template;
+        $validation_errors = array();
         
         // Replace basic post placeholders
         $content = str_replace('{{post_title}}', $post->post_title, $content);
@@ -186,10 +187,19 @@ class Nexjob_Configs {
         // Replace post URL with nexjob.tech domain
         $content = str_replace('cms.nexjob.tech', 'nexjob.tech', $content);
         
-        // Replace custom field placeholders
+        // Replace custom field placeholders with validation
         if (preg_match_all('/\{\{([^:}]+)\}\}/', $content, $matches)) {
             foreach ($matches[1] as $field_name) {
                 $field_value = get_post_meta($post->ID, $field_name, true);
+                
+                // Validate field value
+                if (empty($field_value) || 
+                    stripos($field_value, 'unknown') !== false || 
+                    stripos($field_value, 'not specified') !== false ||
+                    stripos($field_value, 'n/a') !== false) {
+                    $validation_errors[] = "Invalid or missing value for field: {$field_name}";
+                }
+                
                 $content = str_replace('{{' . $field_name . '}}', $field_value, $content);
             }
         }
@@ -235,6 +245,19 @@ class Nexjob_Configs {
                 $terms_string = implode(', ', $term_names);
                 $content = str_replace('{{terms:' . $taxonomy . '}}', $terms_string, $content);
             }
+        }
+        
+        // Check for remaining unreplaced placeholders or "unknown" values in final content
+        if (preg_match('/\{\{[^}]+\}\}/', $content) || 
+            stripos($content, 'unknown') !== false ||
+            stripos($content, 'not specified') !== false ||
+            stripos($content, 'n/a') !== false) {
+            $validation_errors[] = "Content contains invalid placeholders or 'unknown' values";
+        }
+        
+        // Return validation errors if any
+        if (!empty($validation_errors)) {
+            throw new Exception('Content validation failed: ' . implode(', ', $validation_errors));
         }
         
         return $content;
