@@ -13,7 +13,7 @@ $configs = new Nexjob_Configs();
 $stats = $logger->get_stats();
 $current_page = isset($_GET['log_page']) ? intval($_GET['log_page']) : 1;
 $status_filter = isset($_GET['status']) ? sanitize_text_field($_GET['status']) : '';
-$logs_data = $logger->get_logs($current_page, 10, $status_filter);
+$logs_data = $logger->get_logs(1, 50, '');
 $recent_errors = $logger->get_recent_errors();
 $all_configs = $configs->get_configs();
 ?>
@@ -134,32 +134,14 @@ $all_configs = $configs->get_configs();
         
         <!-- Request Logs Section -->
         <div class="nexjob-card">
-            <h2>📋 Request Logs</h2>
-            
-            <div class="nexjob-logs-controls">
-                <div class="filter-controls">
-                    <select id="status-filter">
-                        <option value="">All Status</option>
-                        <option value="success" <?php selected($status_filter, 'success'); ?>>Success</option>
-                        <option value="error" <?php selected($status_filter, 'error'); ?>>Error</option>
-                    </select>
-                    <button type="button" id="filter-logs-btn" class="button">Filter</button>
-                </div>
-                
-                <div class="action-controls">
-                    <button type="button" id="export-logs-btn" class="button">Export CSV</button>
-                    <button type="button" id="delete-selected-btn" class="button button-secondary">Delete Selected</button>
-                </div>
-            </div>
+            <h2>📋 Latest Request Logs</h2>
+            <p>Showing the 50 most recent API requests. <a href="<?php echo admin_url('admin.php?page=nexjob-logs'); ?>">View all logs</a></p>
             
             <?php if (!empty($logs_data['logs'])): ?>
             <div class="nexjob-logs-table">
                 <table class="wp-list-table widefat fixed striped">
                     <thead>
                         <tr>
-                            <td class="check-column">
-                                <input type="checkbox" id="select-all-logs" />
-                            </td>
                             <th>Post</th>
                             <th>Status</th>
                             <th>Response Code</th>
@@ -170,9 +152,6 @@ $all_configs = $configs->get_configs();
                     <tbody>
                         <?php foreach ($logs_data['logs'] as $log): ?>
                         <tr>
-                            <th class="check-column">
-                                <input type="checkbox" class="log-checkbox" value="<?php echo $log->id; ?>" />
-                            </th>
                             <td>
                                 <strong><?php echo esc_html($log->post_title); ?></strong>
                                 <div class="post-id">ID: <?php echo $log->post_id; ?></div>
@@ -204,66 +183,25 @@ $all_configs = $configs->get_configs();
                 </table>
             </div>
             
-            <!-- Pagination -->
-            <?php if ($logs_data['total_pages'] > 1): ?>
-            <div class="nexjob-pagination">
-                <?php
-                $base_url = admin_url('admin.php?page=nexjob-autopost');
-                if ($status_filter) {
-                    $base_url .= '&status=' . urlencode($status_filter);
-                }
-                
-                for ($i = 1; $i <= $logs_data['total_pages']; $i++):
-                    $class = ($i == $current_page) ? 'current' : '';
-                    $url = $base_url . '&log_page=' . $i;
-                ?>
-                <a href="<?php echo esc_url($url); ?>" class="page-number <?php echo $class; ?>"><?php echo $i; ?></a>
-                <?php endfor; ?>
+            
+            <div style="margin-top: 15px; text-align: center;">
+                <a href="<?php echo admin_url('admin.php?page=nexjob-logs'); ?>" class="button">View All Logs</a>
             </div>
-            <?php endif; ?>
             
             <?php else: ?>
             <p>No logs found.</p>
             <?php endif; ?>
         </div>
         
-        <!-- Bulk Actions Section -->
+        <!-- Quick Actions Section -->
         <div class="nexjob-card">
-            <h2>🔄 Bulk Actions</h2>
-            <p>Resend multiple posts to the API at once. Select posts from the dropdown below or enter post IDs manually.</p>
-            
-            <div class="bulk-post-selector">
-                <label for="bulk-post-select"><strong>Select Posts:</strong></label>
-                <select id="bulk-post-select" multiple style="height: 100px;">
-                    <?php
-                    $recent_posts = get_posts(array(
-                        'post_type' => 'lowongan-kerja',
-                        'post_status' => 'publish',
-                        'numberposts' => 50,
-                        'orderby' => 'date',
-                        'order' => 'DESC'
-                    ));
-                    
-                    foreach ($recent_posts as $post) {
-                        echo '<option value="' . $post->ID . '">' . $post->ID . ' - ' . esc_html($post->post_title) . '</option>';
-                    }
-                    ?>
-                </select>
-                <p class="description">Hold Ctrl (Cmd on Mac) to select multiple posts</p>
+            <h2>⚡ Quick Actions</h2>
+            <div class="quick-actions">
+                <a href="<?php echo admin_url('admin.php?page=nexjob-logs'); ?>" class="button">📋 View All Logs</a>
+                <a href="<?php echo admin_url('admin.php?page=nexjob-bulk'); ?>" class="button">🔄 Bulk Actions</a>
+                <a href="<?php echo admin_url('admin.php?page=nexjob-configs'); ?>" class="button">⚙️ Manage Configurations</a>
+                <a href="<?php echo admin_url('admin.php?page=nexjob-settings'); ?>" class="button">🛠️ Settings</a>
             </div>
-            
-            <div class="bulk-manual-input">
-                <label for="bulk-post-ids"><strong>Or enter Post IDs manually:</strong></label>
-                <input type="text" id="bulk-post-ids" placeholder="e.g. 123,456,789" class="regular-text" />
-                <p class="description">Comma-separated list of post IDs</p>
-            </div>
-            
-            <div class="bulk-actions-buttons">
-                <button type="button" id="bulk-resend-btn" class="button button-primary">Bulk Resend Selected Posts</button>
-                <button type="button" id="clear-selection-btn" class="button">Clear Selection</button>
-            </div>
-            
-            <div id="bulk-results" style="display: none; margin-top: 15px;"></div>
         </div>
     </div>
 </div>

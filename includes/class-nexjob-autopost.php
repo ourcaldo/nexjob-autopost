@@ -135,15 +135,26 @@ class Nexjob_Autopost {
                 }
             }
             
-            // Prepare API data
+            // Prepare API data in correct format
             $post_data = array(
                 'type' => 'now',
                 'shortLink' => true,
                 'date' => current_time('c'),
-                'integrationId' => $config->integration_id,
                 'tags' => $tag_data,
-                'images' => array(),
-                'content' => $content
+                'posts' => array(
+                    array(
+                        'integration' => array(
+                            'id' => $config->integration_id
+                        ),
+                        'value' => array(
+                            array(
+                                'content' => $content
+                            )
+                        ),
+                        'group' => 'nexjob-autopost-group',
+                        'settings' => new stdClass()
+                    )
+                )
             );
             
             // Send to API

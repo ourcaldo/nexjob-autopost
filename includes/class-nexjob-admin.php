@@ -50,6 +50,33 @@ class Nexjob_Admin {
         
         add_submenu_page(
             'nexjob-autopost',
+            'Dashboard',
+            'Dashboard',
+            'manage_options',
+            'nexjob-autopost',
+            array($this, 'admin_page')
+        );
+        
+        add_submenu_page(
+            'nexjob-autopost',
+            'Logs',
+            'Logs',
+            'manage_options',
+            'nexjob-logs',
+            array($this, 'logs_page')
+        );
+        
+        add_submenu_page(
+            'nexjob-autopost',
+            'Bulk Actions',
+            'Bulk Actions',
+            'manage_options',
+            'nexjob-bulk',
+            array($this, 'bulk_page')
+        );
+        
+        add_submenu_page(
+            'nexjob-autopost',
             'Configurations',
             'Configurations',
             'manage_options',
@@ -85,7 +112,7 @@ class Nexjob_Admin {
      */
     public function enqueue_admin_scripts($hook) {
         // Only load on our plugin pages
-        if (!in_array($hook, ['toplevel_page_nexjob-autopost', 'nexjob-autopost_page_nexjob-configs', 'nexjob-autopost_page_nexjob-settings'])) {
+        if (!in_array($hook, ['toplevel_page_nexjob-autopost', 'nexjob-autopost_page_nexjob-logs', 'nexjob-autopost_page_nexjob-bulk', 'nexjob-autopost_page_nexjob-configs', 'nexjob-autopost_page_nexjob-settings'])) {
             return;
         }
         
@@ -103,6 +130,20 @@ class Nexjob_Admin {
      */
     public function admin_page() {
         include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/main-page.php';
+    }
+    
+    /**
+     * Display logs page
+     */
+    public function logs_page() {
+        include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/logs-page.php';
+    }
+    
+    /**
+     * Display bulk actions page
+     */
+    public function bulk_page() {
+        include NEXJOB_AUTOPOST_PLUGIN_DIR . 'admin/bulk-page.php';
     }
     
     /**

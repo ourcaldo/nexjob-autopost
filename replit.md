@@ -113,14 +113,22 @@ Lowongan kerja di kota {nexjob_lokasi_kota}, cek selengkapnya di {post_link}.
 
 ## Recent Enhancements (2025-07-17)
 
+### Critical API Format Fix (Evening)
+- ✓ **Fixed API Data Structure**: Corrected the API request format to match the expected NexPocket API format
+  - Changed from old format with `integrationId` field to new format with `posts` array
+  - Fixed data structure: `{"type": "now", "shortLink": true, "date": "...", "tags": [...], "posts": [{"integration": {"id": "..."}, "value": [{"content": "..."}], "group": "...", "settings": {}}]}`
+  - Ensures proper API communication and prevents request failures
+
 ### Major UI Restructure (Evening)
 - ✓ **Separated Admin Interface**: Split the messy single-page admin into clean, focused sections
-  - **Main Dashboard**: Statistics overview, recent configurations, recent errors, logs, and bulk actions
+  - **Main Dashboard**: Statistics overview, recent configurations, recent errors, and latest 50 logs only
+  - **Logs Page**: Dedicated page for viewing and managing all API request logs with filters
+  - **Bulk Actions Page**: Separate page for bulk operations, retrying failed requests, and quick actions
   - **Settings Page**: General plugin settings (API endpoint, auth token, log retention, retry settings, email notifications)
   - **Configurations Page**: Dedicated page for managing autopost configurations with CRUD operations
 - ✓ **Removed Integration ID from General Settings**: Moved integration ID to individual autopost configurations for better flexibility
 - ✓ **Fixed Log Details Modal**: Implemented proper AJAX-based log details viewer with formatted JSON display
-- ✓ **Enhanced Admin Menu Structure**: Clear separation between Dashboard, Configurations, and Settings
+- ✓ **Enhanced Admin Menu Structure**: Clear separation between Dashboard, Logs, Bulk Actions, Configurations, and Settings
 - ✓ **Improved User Experience**: 
   - Clean, intuitive navigation with proper WordPress admin styling
   - Responsive design for mobile compatibility
@@ -129,7 +137,9 @@ Lowongan kerja di kota {nexjob_lokasi_kota}, cek selengkapnya di {post_link}.
 
 ### Technical Improvements (Evening)
 - **Page Templates**: 
-  - `admin/main-page.php`: Dashboard with statistics and logs
+  - `admin/main-page.php`: Dashboard with statistics and latest 50 logs
+  - `admin/logs-page.php`: Full logs viewer with pagination and filters
+  - `admin/bulk-page.php`: Bulk actions and failed request management
   - `admin/settings-page.php`: General plugin settings
   - `admin/configs-page.php`: Configuration management
 - **Enhanced JavaScript**: 
@@ -141,6 +151,7 @@ Lowongan kerja di kota {nexjob_lokasi_kota}, cek selengkapnya di {post_link}.
   - Responsive grid layouts for statistics and configurations
   - Better status badges and visual indicators
   - Mobile-friendly design patterns
+- **Cleaned Up Files**: Removed unnecessary git repository files and unused test files
 
 ### Configuration Management Enhancements
 - **Individual Integration IDs**: Each autopost configuration now has its own integration ID
